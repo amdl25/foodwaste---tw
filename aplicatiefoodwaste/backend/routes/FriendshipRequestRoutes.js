@@ -1,0 +1,91 @@
+import express from 'express';
+import { createFriendshipRequest, getFriendshipRequest, getFriendshipRequestId, updateFriendshipRequest, deleteFriendshipRequest } from '../dataAccess/FriendshipRequestDa.js';
+import User from '../entities/User.js'
+import FriendshipRequest from '../entities/FriendshipRequest.js';
+import { Sequelize } from 'sequelize';
+
+let friendshipRequestRouter = express.Router();
+
+// post for submitting data; get for retrieving data; put for updating data
+
+friendshipRequestRouter.route('/friendshipRequest').post(async (req, res) => {
+    res.status(201).json(await createFriendshipRequest(req.body));
+})
+
+friendshipRequestRouter.route('/friendshipRequest').get(async (req, res) => {
+    res.status(200).json(await getFriendshipRequest());
+})
+
+friendshipRequestRouter.route('/friendshipRequest/:id').get(async (req, res) => {
+    res.status(200).json(await getFriendshipRequestId(req.params.id));
+})
+
+friendshipRequestRouter.route('/friendshipRequest/:id').put(async (req,res ) => {
+    let ret = await updateFriendshipRequest(req.params.id, req.body);
+
+    if(ret.error)
+        res.status(400).json(ret.msg);
+    else
+        res.status(200).json(ret.obj);
+
+})
+
+friendshipRequestRouter.route('/friendshipRequest/:id').delete(async (req,res ) => {
+    let ret = await deleteFriendshipRequest(req.params.id);
+
+    if(ret.error)
+        res.status(400).json(ret.msg);
+    else
+        res.status(200).json(ret.obj);
+
+});
+
+
+friendshipRequestRouter.route('/send-request').post(async (req, res) => {
+  const { senderId, receiverId } = req.body;
+
+  try {
+    // Check if sender and recipient users exist
+    const [senderUser, recipientUser] = await Promise.all([
+      User.findByPk(senderId),
+      User.findByPk(receiverId),
+    ]);
+
+    if (!senderUser || !recipientUser) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    // Check if the friendship already exists
+    const existingFriendshipRequest = await FriendshipRequest.findOne({
+      where: {
+        [Sequelize.Op.or]: [
+          { senderId: senderId, receiverId: receiverId },
+          { senderId: receiverId, receiverId: senderId },
+        ],
+      },
+    });
+
+    if (existingFriendshipRequest) {
+      res.status(400).json({ error: 'Friendship request already exists' });
+      return;
+    }
+
+    // Create a friendshiprequest
+    const friendshiprequest = await FriendshipRequest.create({
+      senderId: senderId,
+      receiverId: receiverId,
+    });
+
+    res.status(201).json({ message: 'Friendship request sent successfully', friendshiprequest });
+  } catch (error) {
+    console.error('Error creating friendship request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+export default friendshipRequestRouter;
+
+
+// testare requesturi prin postman -> nu mai apelam de 2 ori Get cu ruta create, fiindca daca apelam iar cu force pe true => ni se sterg datele din bd
