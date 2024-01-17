@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../../src/stiluri.css';
+import './stiluri.css';
+
 const Principal = () => {
   const navigate = useNavigate();
   const { userEmail } = useParams();
@@ -24,7 +25,7 @@ const Principal = () => {
           Adauga produs
         </button>
         <button className="button" onClick={handleSeeingFriendship}>Vizualizeaza prietenii</button>
-        <button className="button">Button 3</button>
+        <button className="button">Grupuri</button>
         <button className="button">Button 4</button>
       </div>
 

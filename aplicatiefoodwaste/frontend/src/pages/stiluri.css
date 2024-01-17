@@ -1,0 +1,72 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .main-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-panel {
+    flex: 1;
+    overflow: auto; /* Add this if you want the left panel to be scrollable if its content exceeds the height */
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 15px 20px; /* Vertical padding of 15px and horizontal padding of 20px */
+    font-size: 18px; /* Larger font size */
+    width: 250px; /* Wider button */
+  }
+
+  
+  .button-home{
+    display: block;
+    margin: 10px auto; /* 10px margin on top and bottom, auto margin on left and right for horizontal centering */
+    padding: 15px 20px;
+    font-size: 18px;
+    width: 250px;
+  }
+  
+  .right-panel {
+    flex: 1;
+    overflow: auto; /* Add this if you want the right panel to be scrollable if its content exceeds the height */
+    padding: 20px;
+    background-color: #e0e0e0;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list li {
+    margin-bottom: 10px;
+  }
+  
+  .bottom-section {
+    margin-top: 20px;
+  }
+
+  .container.login {
+    font-size: 18px; /* Adjust the font size as needed */
+  }
+  
+  .container.login input {
+    padding: 10px; /* Adjust the padding for input fields */
+    margin-bottom: 10px; /* Add margin between input fields */
+  }
+  
+  .container.login button.btnLogin {
+    display: block;
+    margin: 10px auto; /* 10px margin on top and bottom, auto margin on left and right for horizontal centering */
+    padding: 15px 20px;
+    font-size: 18px;
+    width: 250px;
+  }
+  
+  

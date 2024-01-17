@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams} from 'react-router-dom';
-import './styles.css';
+import './stiluri.css';
 
 const FriendshipDisplay = () => {
   const { userEmail } = useParams();
