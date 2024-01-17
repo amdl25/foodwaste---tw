@@ -29,14 +29,15 @@ const Principal = () => {
         <button className="button" onClick={handleAddProductClick}>
           Adauga produs
         </button>
-        <button className="button" onClick={handleSeeingFriendship}>Vizualizeaza prietenii</button>
+        <button className="button" onClick={handleSeeingFriendship}>Cereri prietenie</button>
         <button className="button" onClick={handleSeeingGrupuri}>Grupuri</button>
-        <button className="button">Button 4</button>
+        <button className="button">Lista prieteni</button>
       </div>
 
       {/* Right Panel */}
       <div className="right-panel">
         <ul className="list">
+          <h1>Lista alimente disponibile</h1>
           <li>List Item 1</li>
           <li>List Item 2</li>
           <li>List Item 3</li>
@@ -44,8 +45,9 @@ const Principal = () => {
         </ul>
 
         <div className="bottom-section">
-          <button className="button">Bottom Button</button>
-          <input type="text" placeholder="Enter something" />
+          <button >Alege aliment</button>
+          <input type="text" placeholder="Il vreau!" />
+          <input type="text" placeholder="Id-ul posesorului" />
         </div>
       </div>
     </div>

@@ -9,43 +9,6 @@ const FriendshipDisplay = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const [friendRequests, setFriendRequests] = useState([]);
-
-  const fetchFriendRequests = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/send-request' + userEmail);
-      setFriendRequests(response.data);
-    } catch (error) {
-      console.error('Error fetching friend requests:', error);
-    }
-  };
-
-  // Fetch friend requests when the component mounts
-  useEffect(() => {
-    fetchFriendRequests();
-  }, []);
-  const handleSearchFriend = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/user/` + searchEmail);
-      console.log('Response:', response);
-
-      
-        if(response.status === 404 && response.data.message === 'User does not exist' ) {
-          setErrorMessage('User not found.');
-          setSuccessMessage('');
-        }
-        else if (response.status === 200) {
-        if (response.data && response.data.message === 'User exists') {
-          setSuccessMessage('User exists!');
-          setErrorMessage('');
-        }}
-    } catch (error) {
-      console.error('Search friend error:', error);
-      setErrorMessage('Error searching for friend. Please try again.');
-      setSuccessMessage('');
-    }
-  }
-
   const handleAdaugaPrieten = async () => {
     try {
       const senderEmail = userEmail;
@@ -59,7 +22,7 @@ const FriendshipDisplay = () => {
       if (response.status === 201) {
         setSuccessMessage('Friendship request sent successfully!');
         setErrorMessage('');
-      } else {
+      } else{
         setErrorMessage('Error sending friendship request. Please try again.');
         setSuccessMessage('');
       }
@@ -83,8 +46,63 @@ const FriendshipDisplay = () => {
       }
     }
   };
+
+  const handleAcceptare = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/accept-friend-request', {
+        userEmail: userEmail,
+        senderEmail: searchEmail,
+      });
+
+      if (response.status === 200 && response.data.message == 'Friend request accepted successfully') {
+        setSuccessMessage('Friend request accepted successfully');
+        setErrorMessage('');
+      } else if(response.status == 404){
+        setErrorMessage('Error accepting friend request. Please try again.');
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      console.error('Accept friend request error:', error);
+      setErrorMessage('Error accepting friend request. Please try again.');
+      setSuccessMessage('');
+    }
+  };
+
+
+  const handleSearchFriend = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/user/` + searchEmail);
+      console.log('Response:', response);
   
+      if (response.status === 200 ) {
+        if (response.data && response.data.message === 'User exists') {
+          setSuccessMessage('User exists!');
+          setErrorMessage('');
+        }
+        
+      }
+    } catch (error) {
+      console.error('Search friend error:', error);
+      setErrorMessage('User does not exist');
+      setSuccessMessage('');
+    }
+  };
+
   
+  const [friendshipRequests, setFriendshipRequests] = useState([]);
+
+  useEffect(() => {
+    const fetchFriendshipRequests = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/friendshipRequest - list');
+        setFriendshipRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching friendship requests:', error);
+      }
+    };
+
+    fetchFriendshipRequests();
+  }, []);
 
   return (
     <div className="main-container">
@@ -105,23 +123,33 @@ const FriendshipDisplay = () => {
 
       <div>
         {successMessage && (
-          <p style={{ color: 'green', marginTop: '10px' }}>{successMessage}</p>
+          <p style={{ color: 'green', marginBottom: '50px' }}>{successMessage}</p>
         )}
         {errorMessage && (
-          <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
+          <p style={{ color: 'red', marginBottom: '50px' }}>{errorMessage}</p>
         )}
       </div>
 
     {/* Right Panel */}
     <div className="right-panel">
     <ul className="list">
-          {friendRequests.map((friend) => (
-            <li key={friend.FriendshipRequestId}>{/* Display friend request details */}</li>
-          ))}
-     </ul>
+      <h1>Lista cereri prietenie</h1>
+      <ul>
+        {friendshipRequests.map((friendshipRequest) => (
+          <li key={friendshipRequest.id}>
+            {/* Render details of each friendship request */}
+            {/* <p>Sender ID: {friendshipRequest.senderId}</p> */}
+            <p>User First Name: {friendshipRequest.User.UserFirstName}</p>
+            <p>User Last Name: {friendshipRequest.User.UserLastName}</p>
+            <p>User Email: {friendshipRequest.User.UserEmail}</p>
+            {/* Add more details as needed */}
+          </li>
+        ))}
+      </ul>
+      </ul>
 
       <div className="bottom-section">
-        <button>Accepta prietenie</button>
+        <button onClick={handleAcceptare}>Accepta prietenie</button>
         <input type="text" placeholder="Email celui care a cerut prietenia" />
       </div>
     </div>

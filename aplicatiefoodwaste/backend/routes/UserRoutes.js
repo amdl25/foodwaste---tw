@@ -20,8 +20,8 @@ userRouter.route('/user/:email').get(async (req, res) => {
     try {
       // Assuming id is the email in this case
       const user = await getUserByEmail(email);
-      if (user === null || user ===undefined) {
-        res.status(404).json({ message: 'User does not exist' });
+      if (user === null || user === undefined) {
+        res.status(400).json({ message: 'User does not exist' });
       } else {
         res.status(200).json({ message: 'User exists'});
       }
