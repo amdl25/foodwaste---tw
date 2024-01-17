@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, getUser, getUserId, updateUser, deleteUser } from '../dataAccess/UserDa.js';
+import { createUser, getUser, getUserByEmail, updateUser, deleteUser } from '../dataAccess/UserDa.js';
 import User from '../entities/User.js'
 
 let userRouter = express.Router();
@@ -14,10 +14,23 @@ userRouter.route('/user').get(async (req, res) => {
     res.status(200).json(await getUser());
 })
 
-userRouter.route('/user/:id').get(async (req, res) => {
-    res.status(200).json(await getUserId(req.params.id));
-})
-
+userRouter.route('/user/:email').get(async (req, res) => {
+    const { email } = req.params;
+  
+    try {
+      // Assuming id is the email in this case
+      const user = await getUserByEmail(email);
+      if (user === null || user ===undefined) {
+        res.status(404).json({ message: 'User does not exist' });
+      } else {
+        res.status(200).json({ message: 'User exists'});
+      }
+    } catch (error) {
+      console.error('Error searching for a friend:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 userRouter.route('/user/:id').put(async (req,res ) => {
     let ret = await updateUser(req.params.id, req.body);
 

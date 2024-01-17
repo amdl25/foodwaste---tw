@@ -6,6 +6,7 @@ import LoginForm from './pages/LoginForm';
 import SignupForm from './pages/SignupForm';
 import Principal from './pages/Principal';
 import AddProduct from './pages/AddProduct';
+import FriendshipDisplay from './pages/FriendshipDisplay';
 import {Link} from 'react-router-dom';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element = {<SignupForm/>} />
         <Route path="/login/principal/:userEmail" element = {<Principal/>} />
         <Route path="/login/principal/add-product/:userEmail" element = {<AddProduct/>} />
+        <Route path="/login/principal/friendship/:userEmail" element = {<FriendshipDisplay/>} />
       </Routes>
 
     </div>

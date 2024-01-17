@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './styles.css';
-
+import '../../src/stiluri.css';
 const Principal = () => {
   const navigate = useNavigate();
   const { userEmail } = useParams();
@@ -9,6 +8,11 @@ const Principal = () => {
   const handleAddProductClick = () => {
     // Navigate to the addProduct page
     navigate('/login/principal/add-product/' + userEmail);
+  };
+
+  const handleSeeingFriendship = () => {
+    // Navigate to the addProduct page
+    navigate('/login/principal/friendship/' + userEmail);
   };
 
   return (
@@ -19,7 +23,7 @@ const Principal = () => {
         <button className="button" onClick={handleAddProductClick}>
           Adauga produs
         </button>
-        <button className="button">Button 2</button>
+        <button className="button" onClick={handleSeeingFriendship}>Vizualizeaza prietenii</button>
         <button className="button">Button 3</button>
         <button className="button">Button 4</button>
       </div>
