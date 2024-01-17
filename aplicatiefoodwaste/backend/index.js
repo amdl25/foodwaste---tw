@@ -7,11 +7,13 @@ import productRouter from './routes/ProductRoutes.js';
 import grupRouter from './routes/GrupRoutes.js';
 import friendshipRouter from './routes/FriendshipRoutes.js';
 import friendshipRequestRouter from './routes/FriendshipRequestRoutes.js';
+import cors from 'cors';
 
 
 env.config();
 
 let app = express();
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({
