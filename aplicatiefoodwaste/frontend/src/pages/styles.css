@@ -2,4 +2,34 @@
     font-size: 1.5rem; /* Adjust the font size as needed */
     padding: 10px 20px; /* Adjust the padding as needed */
   }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    font-size: 1em;
+    padding: 8px; /* Add some padding to the inputs */
+    margin-bottom: 15px;
+  }
+  
+  button {
+    font-size: 1.2em;
+    padding: 10px 20px; /* Add padding to the button */
+  }
+  
   
