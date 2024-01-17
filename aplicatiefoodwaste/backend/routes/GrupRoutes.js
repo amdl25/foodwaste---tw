@@ -41,61 +41,45 @@ grupRouter.route('/grup/:id').delete(async (req,res ) => {
 })
 
 grupRouter.route('/add-to-group').post(async (req, res) => {
-    const { UserId, GrupName } = req.body;
-  
-    try {
-      // Check if the User exists
-      const user = await User.findByPk(UserId);
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
+  const { UserEmail, GrupName } = req.body;
 
-    // Check if the Friend exists
-    const friend = await User.findByPk(friendId);
-    if (!friend) {
-      res.status(404).json({ error: 'Friend not found' });
+  try {
+    // Check if the User exists
+    const user = await User.findOne({ where: { UserEmail: UserEmail } });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
       return;
     }
 
-    // Check if there is a friendship between the User and the Friend
-    const friendship = await Friendship.findOne({
+    // Check if the Grup exists with that name
+    const grup = await Grup.findOne({
       where: {
-        [Sequelize.Op.or]: [
-          { senderId: userId, receiverId: friendId },
-          { senderId: friendId, receiverId: userId },
-        ],
+        GrupName: GrupName,
       },
     });
 
-    if (!friendship) {
-      res.status(400).json({ error: 'Invalid friend or not a friend' });
-      return;
-    }
-
-  
-      // Check if the Grup exists with that name
-      const grup = await Grup.findOne({
-        where: {
-            GrupName: GrupName
-        }
-
-      });
-  
-      // If the Grup doesn't exist, it is created
     if (!grup) {
-        const newGrup = await Grup.create({ GrupName: groupName });
-        await user.addGrup(newGrup);
+      // If the Grup doesn't exist, it is created
+      const newGrup = await Grup.create({ GrupName: GrupName });
+      await user.addGrup(newGrup);
+      res.status(200).json({ message: 'User added to Grup successfully' });
+    } else {
+      // Check if the user is already a member of the group
+      const isMember = await user.hasGrup(grup);
+      if (isMember) {
+        res.status(400).json({ error: 'User is already a member of the group' });
       } else {
         await user.addGrup(grup);
+        res.status(200).json({ message: 'User added to Grup successfully' });
       }
-  
-      res.status(200).json({ message: 'User added to Grup successfully' });
-    } catch (error) {
-      console.error('Error adding user to Grup:', error);
-      res.status(500).json({ error: 'Internal server error' });
     }
-  });
+  } catch (error) {
+    console.error('Error adding user to Grup:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
   
 
 export default grupRouter;

@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 .custom-btn {
     font-size: 1.5rem; /* Adjust the font size as needed */
     padding: 10px 20px; /* Adjust the padding as needed */
@@ -31,5 +36,45 @@
     font-size: 1.2em;
     padding: 10px 20px; /* Add padding to the button */
   }
+
+  .container {
+    display: flex;
+  }
   
+  .main-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-panel {
+    flex: 1;
+    overflow: auto; /* Add this if you want the left panel to be scrollable if its content exceeds the height */
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .button {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .right-panel {
+    flex: 1;
+    overflow: auto; /* Add this if you want the right panel to be scrollable if its content exceeds the height */
+    padding: 20px;
+    background-color: #e0e0e0;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list li {
+    margin-bottom: 10px;
+  }
+  
+  .bottom-section {
+    margin-top: 20px;
+  }
   

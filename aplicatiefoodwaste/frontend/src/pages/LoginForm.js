@@ -1,13 +1,14 @@
 // Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/login', {
@@ -19,6 +20,10 @@ const Login = () => {
         console.log('Logged in successfully:', response.data);
         setSuccessMessage('Logged in successfully!');
         setErrorMessage(''); // Clear any previous error message
+
+        setTimeout(() => {
+          navigate('/login/principal/' + email);
+        }, 2000); // Adjust the delay time as needed
     }
 } catch (error) {
     console.error('Login error:', error);

@@ -2,6 +2,7 @@ import express from 'express';
 import { createProduct, getProduct, getProductId, updateProduct, deleteProduct } from '../dataAccess/ProductDa.js';
 import Product from '../entities/Product.js';
 import User from '../entities/User.js';
+import { Sequelize } from 'sequelize';
 
 let productRouter = express.Router();
 
@@ -40,34 +41,38 @@ productRouter.route('/product/:id').delete(async (req,res ) => {
 })
 
 productRouter.route('/add-product').post(async (req, res) => {
-    const { ProductName, ProductCategory, ProductExpirationDate, ProductIsAvailable, ProductQuantity, UserId } = req.body;
-  
-    try {
-      // Check if the user exists
-      const user = await User.findByPk(UserId);
-  
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
-  
-      // Add the product for the user
-      const product = await createProduct({
-        ProductName,
-        ProductCategory,
-        ProductExpirationDate,
-        ProductIsAvailable,
-        ProductQuantity,
-        UserId,
-      });
-  
-      res.status(201).json(product);
-    } catch (error) {
-      console.error('Error adding product:', error);
-      res.status(500).json({ error: 'Internal server error' });
+  const { ProductName, ProductCategory, ProductExpirationDate, ProductQuantity, UserEmail } = req.body;
+
+  try {
+    // Check if the user exists
+    const user = await User.findOne({
+      where: Sequelize.where(
+        Sequelize.fn('LOWER', Sequelize.col('UserEmail')),
+        Sequelize.fn('LOWER', UserEmail)
+      ),
+    });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
     }
-  });
-  
+
+    // Add the product for the user
+    const product = await Product.create({
+      ProductName,
+      ProductCategory,
+      ProductExpirationDate,
+      ProductIsAvailable: true,
+      ProductQuantity,
+      UserId: user.UserId,  // Use the retrieved userId
+    });
+
+    res.status(201).json(product);
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 export default productRouter;
 
