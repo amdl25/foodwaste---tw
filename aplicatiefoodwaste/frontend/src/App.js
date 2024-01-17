@@ -7,6 +7,7 @@ import SignupForm from './pages/SignupForm';
 import Principal from './pages/Principal';
 import AddProduct from './pages/AddProduct';
 import FriendshipDisplay from './pages/FriendshipDisplay';
+import Grupuri from './pages/Grupuri';
 import {Link} from 'react-router-dom';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login/principal/:userEmail" element = {<Principal/>} />
         <Route path="/login/principal/add-product/:userEmail" element = {<AddProduct/>} />
         <Route path="/login/principal/friendship/:userEmail" element = {<FriendshipDisplay/>} />
+        <Route path="/login/principal/grupuri/:userEmail" element = {<Grupuri/>} />
       </Routes>
 
     </div>

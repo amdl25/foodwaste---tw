@@ -16,6 +16,11 @@ const Principal = () => {
     navigate('/login/principal/friendship/' + userEmail);
   };
 
+  const handleSeeingGrupuri = () => {
+    // Navigate to the addProduct page
+    navigate('/login/principal/grupuri/' + userEmail);
+  };
+
   return (
     <div className="main-container">
       {/* Left Panel */}
@@ -25,7 +30,7 @@ const Principal = () => {
           Adauga produs
         </button>
         <button className="button" onClick={handleSeeingFriendship}>Vizualizeaza prietenii</button>
-        <button className="button">Grupuri</button>
+        <button className="button" onClick={handleSeeingGrupuri}>Grupuri</button>
         <button className="button">Button 4</button>
       </div>
 
