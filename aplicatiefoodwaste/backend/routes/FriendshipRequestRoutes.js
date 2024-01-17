@@ -16,6 +16,7 @@ friendshipRequestRouter.route('/friendshipRequest').get(async (req, res) => {
     res.status(200).json(await getFriendshipRequest());
 })
 
+
 friendshipRequestRouter.route('/friendshipRequest/:id').get(async (req, res) => {
     res.status(200).json(await getFriendshipRequestId(req.params.id));
 })
@@ -42,13 +43,13 @@ friendshipRequestRouter.route('/friendshipRequest/:id').delete(async (req,res ) 
 
 
 friendshipRequestRouter.route('/send-request').post(async (req, res) => {
-  const { senderId, receiverId } = req.body;
+  const { senderEmail, receiverEmail } = req.body;
 
   try {
     // Check if sender and recipient users exist
     const [senderUser, recipientUser] = await Promise.all([
-      User.findByPk(senderId),
-      User.findByPk(receiverId),
+      User.findOne({ where: { UserEmail: senderEmail } }),
+      User.findOne({ where: { UserEmail: receiverEmail } }),
     ]);
 
     if (!senderUser || !recipientUser) {
@@ -60,8 +61,8 @@ friendshipRequestRouter.route('/send-request').post(async (req, res) => {
     const existingFriendshipRequest = await FriendshipRequest.findOne({
       where: {
         [Sequelize.Op.or]: [
-          { senderId: senderId, receiverId: receiverId },
-          { senderId: receiverId, receiverId: senderId },
+          { senderId: senderUser.UserId, receiverId: recipientUser.UserId },
+          { senderId: recipientUser.UserId, receiverId: senderUser.UserId },
         ],
       },
     });
@@ -71,10 +72,10 @@ friendshipRequestRouter.route('/send-request').post(async (req, res) => {
       return;
     }
 
-    // Create a friendshiprequest
+    // Create a friendship request
     const friendshiprequest = await FriendshipRequest.create({
-      senderId: senderId,
-      receiverId: receiverId,
+      senderId: senderUser.UserId,
+      receiverId: recipientUser.UserId,
     });
 
     res.status(201).json({ message: 'Friendship request sent successfully', friendshiprequest });
@@ -83,6 +84,37 @@ friendshipRequestRouter.route('/send-request').post(async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+// friendshipRequestRouter.js
+friendshipRequestRouter.route('/friendshipRequest/:email').get(async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const senderUser = await User.findOne({ where: { UserEmail: email } });
+
+    if (!senderUser) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    const friends = await FriendshipRequest.findAll({
+      where: {
+        [Sequelize.Op.or]: [
+          { senderId: senderUser.UserId },
+          { receiverId: senderUser.UserId },
+        ],
+      },
+    });
+
+    res.status(200).json(friends);
+  } catch (error) {
+    console.error('Error fetching friends:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 
 export default friendshipRequestRouter;
