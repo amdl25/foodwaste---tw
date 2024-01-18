@@ -157,4 +157,25 @@ html, body {
     padding: 10px;
   }
   
+  .container.grup {
+  }
+
+  .elementeGrup {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; /* Adjusted to column layout */
+  height: 100vh;
+  }
+
+  .elementeGrup input{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 40%
+  }
+
+  .butonAdauga {
   
+  }

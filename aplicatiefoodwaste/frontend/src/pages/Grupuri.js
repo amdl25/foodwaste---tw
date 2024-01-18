@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AddToGroup = () => {
@@ -6,7 +6,36 @@ const AddToGroup = () => {
   const [grupName, setGrupName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/grup');
+
+        setGroups(response.data);
+        setLoading(false);
+        setError('');
+      } catch (error) {
+        console.error('Fetch groups error:', error);
+
+        if (error.response) {
+          console.error('Error response from server:', error.response.data);
+          setError(error.response.data.error || 'Server error. Please try again.');
+        } else {
+          setError('Error fetching groups. Please try again.');
+        }
+
+        setLoading(false);
+      }
+    };
+
+    fetchGroups();
+  }, []);
+
+  console.log('Groups:', groups);
   const handleAddToGrup = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/add-to-group', {
@@ -33,7 +62,8 @@ const AddToGroup = () => {
   };
 
   return (
-    <div>
+    <div className = "container grup">
+      <div className = "elementeGrup">
       <input
         type="text"
         placeholder="User Email"
@@ -50,6 +80,20 @@ const AddToGroup = () => {
 
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div className = "listaGrupuri">
+      <h1>Lista grupurilor existente</h1>
+      <ul className="list">
+          {groups.map((group) => (
+            <li key={group.grupid}>
+              {group.GrupName}
+            </li>
+          ))}
+        </ul>
+        </div>
+        </div>
+      
     </div>
   );
 };
