@@ -63,17 +63,17 @@ const AddToGroup = () => {
       <div className = "elementeGrup">
       <input
         type="text"
-        placeholder="User Email"
+        placeholder="Email user"
         value={userEmail}
         onChange={(e) => setUserEmail(e.target.value)}
       />
       <input
         type="text"
-        placeholder="Grup Name"
+        placeholder="Nume grup"
         value={grupName}
         onChange={(e) => setGrupName(e.target.value)}
       />
-      <button onClick={handleAddToGrup}>Add to Grup</button>
+      <button onClick={handleAddToGrup}>Adauga in grup</button>
 
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}

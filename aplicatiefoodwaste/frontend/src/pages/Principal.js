@@ -86,26 +86,38 @@ const Principal = () => {
       <div className="left-panel">
         {/* Button to navigate to addProduct page */}
       
-        <button className="button" onClick={handleAddProductClick}>
+        <button  onClick={handleAddProductClick}>
           Adauga produs
         </button>
-        <button className="button" onClick={handleSeeingFriendship}>Cereri prietenie</button>
-        <button className="button" onClick={handleSeeingGrupuri}>Grupuri</button>
+        <button  onClick={handleSeeingFriendship}>Cereri prietenie</button>
+        <button onClick={handleSeeingGrupuri}>Grupuri</button>
         </div>
      
 
       {/* Right Panel */}
-      <div className="right-panel">
-        <h1>Lista alimentelor disponibile</h1>
-      <ul className="list">
-    {products.map((product) => (
-      <li key={product.productId}>
-        {product.ProductName} ------ {product.ProductCategory} -----Expiration Date:{ formattedDatesArray(product.ProductExpirationDate)}
-        .------id-posesor = {product.UserId}
-      </li>
-    ))}
-  </ul>
-
+      <h1>Lista alimentelor disponibile</h1>
+      <div className="right-panel2">
+        <table>
+        <thead>
+          <tr>
+            <th>Categorie</th>
+            <th>Nume produs</th>
+            <th>Data expirare</th>
+            <th>Id posesor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.productId}>
+              <td>{product.ProductCategory}</td>
+              <td>{product.ProductName}</td>
+              <td>{formattedDatesArray(product.ProductExpirationDate)}</td>
+              <td>{product.UserId}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
 
         <div className="bottom-section">
           <button onClick = {handleAnnounceOwner} >Alege aliment</button>
@@ -114,7 +126,7 @@ const Principal = () => {
           {mesaj && (
            <p style={{ color: 'green', marginTop: '10px' }}>{mesaj}</p>
           )}
-        </div>
+        
       </div>
 
       <div className="friend-list">
@@ -124,8 +136,8 @@ const Principal = () => {
           <li key={friendship.FriendshipId}>
             {/* Display only the names of friends associated with the userEmail */}
             {friendship.Sender.UserEmail === userEmail
-              ? ` ${friendship.Receiver.UserEmail}`
-              : ` ${friendship.Sender.UserEmail}`}
+              ? `${friendship.Receiver.UserEmail}`
+              : `${friendship.Sender.UserEmail}`}
           </li>
         ))}
       </ul>

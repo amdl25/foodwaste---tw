@@ -129,9 +129,9 @@ const FriendshipDisplay = () => {
           <p style={{ color: 'red', marginBottom: '50px' }}>{errorMessage}</p>
         )}
       </div>
-
+          </div>
     {/* Right Panel */}
-    <div className="right-panel">
+    <div className="right-panel3">
     <ul className="list">
       <h1>Lista cereri prietenie</h1>
       <ul>
@@ -155,10 +155,7 @@ const FriendshipDisplay = () => {
       </div>
     </div>
   </div>
-    <div>
-      
-</div>
-</div>
+
   );
 };
 

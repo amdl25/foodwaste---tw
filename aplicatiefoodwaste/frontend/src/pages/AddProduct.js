@@ -91,22 +91,22 @@ const AddProduct = () => {
     <div className="container product">
       <h2></h2>
       <div>
-        <label>Product Name:</label>
+        <label>Nume produs:</label>
         <input type="text" value={productName} onChange={(e) => setProductName(e.target.value)} />
       </div>
 
       <div>
-        <label>Product Category:</label>
+        <label>Categorie:</label>
         <input type="text" value={productCategory} onChange={(e) => setProductCategory(e.target.value)} />
       </div>
 
       <div>
-        <label>Expiration Date:</label>
+        <label>Data expirare:</label>
         <input type="date" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
       </div>
 
       <div>
-        <label>Quantity:</label>
+        <label>Cantitate:</label>
         <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
       </div>
 
@@ -121,27 +121,26 @@ const AddProduct = () => {
         {errorMessage && (
           <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
         )}
+      <h2>Lista alimentelor din frigider</h2>
       </div>
 
       {/* Display the list of user products */}
-      <h2>Lista alimentelor din frigider</h2>
+      
       <table>
         <thead>
           <tr>
-            <th>Category</th>
-            <th>Product Name</th>
-            <th>Expiration Date</th>
-            <th>Quantity</th>
+            <th>Categorie</th>
+            <th>Nume produs</th>
+            <th>Data expirare</th>
+            <th>Cantitate</th>
           </tr>
         </thead>
         <tbody>
           {Object.keys(groupedProducts).map((category) => (
             <React.Fragment key={category}>
-              <tr>
-                <td colSpan="4" style={{ fontWeight: 'bold' }}>{category}</td>
-              </tr>
               {groupedProducts[category].map((product) => (
                 <tr key={product.productId}>
+                  <td style={{ fontWeight: 'bold' }}>{category}</td>
                   <td>{product.ProductName}</td>
                   <td>{formattedDatesArray(product.ProductExpirationDate)}</td>
                   <td>{product.ProductQuantity}</td>
