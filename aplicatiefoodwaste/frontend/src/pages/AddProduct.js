@@ -68,6 +68,24 @@ const AddProduct = () => {
     navigate('/login/principal/'+ userEmail);
   };
 
+  const groupProductsByCategory = (products) => {
+    const groupedProducts = {};
+
+    products.forEach((product) => {
+      const category = product.ProductCategory;
+
+      if (!groupedProducts[category]) {
+        groupedProducts[category] = [];
+      }
+
+      groupedProducts[category].push(product);
+    });
+
+    return groupedProducts;
+  };
+
+  const groupedProducts = groupProductsByCategory(userProducts);
+
 
   return (
     <div className="container product">
@@ -107,13 +125,32 @@ const AddProduct = () => {
 
       {/* Display the list of user products */}
       <h2>Lista alimentelor din frigider</h2>
-      <ul>
-        {userProducts.map((product) => (
-          <li key={product.productId}>
-            {product.ProductName} - {product.ProductCategory} - Expiration Date: { formattedDatesArray(product.ProductExpirationDate)} - Quantity: {product.ProductQuantity}
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Product Name</th>
+            <th>Expiration Date</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(groupedProducts).map((category) => (
+            <React.Fragment key={category}>
+              <tr>
+                <td colSpan="4" style={{ fontWeight: 'bold' }}>{category}</td>
+              </tr>
+              {groupedProducts[category].map((product) => (
+                <tr key={product.productId}>
+                  <td>{product.ProductName}</td>
+                  <td>{formattedDatesArray(product.ProductExpirationDate)}</td>
+                  <td>{product.ProductQuantity}</td>
+                </tr>
+              ))}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
     </div>
 
   );

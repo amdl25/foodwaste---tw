@@ -178,3 +178,27 @@ html, body {
   .butonAdauga {
   
   }
+
+  .participants-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .group-row {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .group-column,
+  .user-email-column {
+    margin-right: 20px;
+  }
+  
+  .group-column {
+    flex: 1;
+  }
+  
+  .user-email-column {
+    flex: 1;
+  }
+  

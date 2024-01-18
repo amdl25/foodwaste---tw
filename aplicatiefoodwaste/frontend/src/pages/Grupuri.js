@@ -6,36 +6,33 @@ const AddToGroup = () => {
   const [grupName, setGrupName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [usersInGroups, setUsersInGroups] = useState([]);
   const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchGroups = async () => {
+    const fetchUsersInGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/grup');
-
-        setGroups(response.data);
-        setLoading(false);
-        setError('');
+        const groupsResponse = await axios.get('http://localhost:8000/api/grup');
+        setGroups(groupsResponse.data);
+        const response = await axios.get('http://localhost:8000/api/usersInGroups');
+        setUsersInGroups(response.data);
+        setErrorMessage('');
       } catch (error) {
         console.error('Fetch groups error:', error);
 
         if (error.response) {
           console.error('Error response from server:', error.response.data);
-          setError(error.response.data.error || 'Server error. Please try again.');
+          setErrorMessage(error.response.data.error || 'Server error. Please try again.');
         } else {
-          setError('Error fetching groups. Please try again.');
+          setErrorMessage('Error fetching groups. Please try again.');
         }
 
-        setLoading(false);
       }
     };
 
-    fetchGroups();
+    fetchUsersInGroups();
   }, []);
 
-  console.log('Groups:', groups);
   const handleAddToGrup = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/add-to-group', {
@@ -81,13 +78,19 @@ const AddToGroup = () => {
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className = "listaGrupuri">
       <h1>Lista grupurilor existente</h1>
       <ul className="list">
-          {groups.map((group) => (
-            <li key={group.grupid}>
-              {group.GrupName}
+    {usersInGroups
+    .filter((user) => user.groups.length > 0) // Filter out users with no groups
+    .map((user) => (
+      <li key={user.UserId}>
+        <strong>User Email:</strong> {user.UserEmail}
+        <ul>
+          {user.groups.map((groupName) => (
+            <li key={groupName}>{groupName}</li>
+          ))}
+        </ul>
             </li>
           ))}
         </ul>

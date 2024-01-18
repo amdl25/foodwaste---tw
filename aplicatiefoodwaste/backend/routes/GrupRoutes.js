@@ -29,6 +29,30 @@ grupRouter.route('/grup/:id').put(async (req,res ) => {
         res.status(200).json(ret.obj);
 
 })
+grupRouter.get('/usersInGroups', async (req, res) => {
+  try {
+    const usersInGroups = await User.findAll({
+      include: [
+        {
+          model: Grup,
+
+        },
+      ],
+    });
+
+    const formattedUsersInGroups = usersInGroups.map((user) => ({
+      UserId: user.UserId,
+      UserEmail: user.UserEmail, // Assuming the user model has an 'email' field
+      groups: user.Grups.map((grup) => grup.GrupName), // Adjust the field based on your Grup model
+    }));
+
+    res.json(formattedUsersInGroups);
+  } catch (error) {
+    console.error('Error fetching users in groups:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 grupRouter.route('/grup/:id').delete(async (req,res ) => {
     let ret = await deleteGrup(req.params.id);
