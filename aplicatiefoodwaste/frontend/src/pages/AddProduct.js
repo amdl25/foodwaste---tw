@@ -13,6 +13,7 @@ const AddProduct = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
 
+
   const handleAddProduct = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/add-product', {
@@ -48,8 +49,9 @@ const AddProduct = () => {
     navigate('/login/principal/'+ userEmail);
   };
 
+
   return (
-    <div className="container">
+    <div className="container product">
       <h2></h2>
       <div>
         <label>Product Name:</label>
@@ -71,9 +73,10 @@ const AddProduct = () => {
         <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
       </div>
 
-      <button onClick={handleAddProduct}>Adauga produs</button>
-      <button onClick={goBack}>Intoarce-te in pagina principala</button>
-
+      <div class="btnContainer">
+      <button class="btnProdus" onClick={handleAddProduct}>Adauga produs</button>
+      <button class="btnReturn" onClick={goBack}>Intoarce-te in pagina principala</button>
+      </div>
       <div>
         {successMessage && (
           <p style={{ color: 'green', marginTop: '10px' }}>{successMessage}</p>

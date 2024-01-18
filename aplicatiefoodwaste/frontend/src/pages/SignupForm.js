@@ -50,7 +50,7 @@ const Signup = () => {
   
 
   return (
-    <div className="container mt-5">
+    <div className="container signup">
       <h2>Sign up</h2>
       <div>
         <label>First Name:</label>
@@ -72,7 +72,7 @@ const Signup = () => {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
 
-      <button onClick={handleSignup}>Signup</button>
+      <button className="btnSignup" onClick={handleSignup}>Signup</button>
 
       <div>
         {errorMessage && (

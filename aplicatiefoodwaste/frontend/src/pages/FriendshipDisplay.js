@@ -57,10 +57,8 @@ const FriendshipDisplay = () => {
       if (response.status === 200 && response.data.message == 'Friend request accepted successfully') {
         setSuccessMessage('Friend request accepted successfully');
         setErrorMessage('');
-      } else if(response.status == 404){
-        setErrorMessage('Error accepting friend request. Please try again.');
-        setSuccessMessage('');
-      }
+      } 
+
     } catch (error) {
       console.error('Accept friend request error:', error);
       setErrorMessage('Error accepting friend request. Please try again.');

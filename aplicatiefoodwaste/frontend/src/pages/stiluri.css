@@ -1,6 +1,7 @@
 html, body {
-    height: 100%;
     margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   
   .main-container {
@@ -9,18 +10,20 @@ html, body {
   }
   
   .left-panel {
+    width: 50%;
     flex: 1;
-    overflow: auto; /* Add this if you want the left panel to be scrollable if its content exceeds the height */
     padding: 20px;
-    background-color: #f0f0f0;
+    display: flex;
+    align-items: flex-start;
+
   }
   
   .button {
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 20px; /* Vertical padding of 15px and horizontal padding of 20px */
-    font-size: 18px; /* Larger font size */
-    width: 250px; /* Wider button */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:space-around;
+    padding: 15px;
   }
 
   
@@ -33,10 +36,11 @@ html, body {
   }
   
   .right-panel {
+    width: 50%;
     flex: 1;
-    overflow: auto; /* Add this if you want the right panel to be scrollable if its content exceeds the height */
     padding: 20px;
-    background-color: #e0e0e0;
+    margin-top: 50px;
+    margin-left: 300px;
   }
   
   .list {
@@ -54,11 +58,30 @@ html, body {
 
   .container.login {
     font-size: 18px; /* Adjust the font size as needed */
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center; 
   }
   
   .container.login input {
-    padding: 10px; /* Adjust the padding for input fields */
-    margin-bottom: 10px; /* Add margin between input fields */
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .container.signup input {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .container {
+    background-image: url("../HomeImage.jpg");
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    margin-top: 0;
   }
   
   .container.login button.btnLogin {
@@ -66,7 +89,72 @@ html, body {
     margin: 10px auto; /* 10px margin on top and bottom, auto margin on left and right for horizontal centering */
     padding: 15px 20px;
     font-size: 18px;
-    width: 250px;
+    height: 50px;
+    width: 150px;
+    background-color: chocolate;
+  }
+
+  .container.signup button.btnSignup {
+    display: block;
+    margin: 10px auto; /* 10px margin on top and bottom, auto margin on left and right for horizontal centering */
+    padding: 15px 20px;
+    font-size: 18px;
+    height: 50px;
+    width: 150px;
+    background-color: chocolate;
+  }
+
+  .container.signup {
+    font-size: 18px; /* Adjust the font size as needed */
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center; 
+  }
+  
+  .container.btnHome {
+    font-size: 18px; /* Adjust the font size as needed */
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .containerHome {
+    font-size: 18px; /* Adjust the font size as needed */
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center; 
+  }
+
+  .container.product {
+    font-size: 18px; /* Adjust the font size as needed */
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center; 
+  }
+
+  .container.product input{
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+  
+  .btnContainer {
+    display: flex;
+    margin-top: 30px;
+  }
+  
+  .container.btnProduct {
+    margin-right: 50%;  
+    padding: 10px;
+  }
+  
+  .container.btnReturn {
+    margin-left: 50%;  
+    padding: 10px;
   }
   
   
