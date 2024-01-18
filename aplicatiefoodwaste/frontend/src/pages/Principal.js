@@ -7,7 +7,6 @@ const Principal = () => {
   const navigate = useNavigate();
   const { userEmail } = useParams();
   const [products, setProducts] = useState([]);
-  const [selectedProductId, setSelectedProductId] = useState(null);
   const [mesaj, stateMesaj] = useState(null);
 
   const handleAddProductClick = () => {
@@ -25,18 +24,10 @@ const Principal = () => {
     navigate('/login/principal/grupuri/' + userEmail);
   };
 
-  const handleRemoveProduct = async () => {
+  const handleAnnounceOwner= async () => {
       // Send a request to your backend to remove the selected product
-      try {
-        await axios.delete(`http://localhost:8000/api/product/` );
-        // Update the product list after successful removal
-        fetchProductList();
-        // Reset selectedProductId
-      } catch (error) {
-        console.error('Error removing product:', error);
-      }
-
-      stateMesaj('Userul va fi notificat');
+     
+      stateMesaj('Ownerul va fi notificat');
     }
   
 
@@ -53,6 +44,13 @@ const Principal = () => {
   useEffect(() => {
     fetchProductList();
   }, []);
+
+  const formattedDatesArray = (product) => {
+    if (product) {
+      const [year, month, day] =product.split('T')[0].split('-');
+      return `${year}-${month}-${day}`;
+    }
+  };
 
   return (
     <div className="container">
@@ -75,7 +73,7 @@ const Principal = () => {
       <ul className="list">
     {products.map((product) => (
       <li key={product.productId}>
-        {product.ProductName} ------ {product.ProductCategory} ----- {product.ProductExpirationDate}
+        {product.ProductName} ------ {product.ProductCategory} -----Expiration Date:{ formattedDatesArray(product.ProductExpirationDate)}
         .------id-posesor = {product.UserId}
       </li>
     ))}
@@ -83,9 +81,9 @@ const Principal = () => {
 
 
         <div className="bottom-section">
-          <button onClick = {handleRemoveProduct} >Alege aliment</button>
-          <input type="text" placeholder="Il vreau!" />
-          <input type="text" placeholder="Id-ul posesorului" />
+          <button onClick = {handleAnnounceOwner} >Alege aliment</button>
+          <input type="text" placeholder="Il vreau!"/>
+          <input type="text" placeholder="Id-ul posesorului"/>
           {mesaj && (
   <p style={{ color: 'green', marginTop: '10px' }}>{mesaj}</p>
 )}

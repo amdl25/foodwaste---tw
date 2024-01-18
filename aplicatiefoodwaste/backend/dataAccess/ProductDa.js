@@ -1,4 +1,9 @@
 import Product from '../entities/Product.js';
+import {Op,literal} from 'sequelize';
+import { Sequelize } from 'sequelize';
+import {format} from 'date-fns';
+import moment from 'moment';
+import User from '../entities/User.js';
 
 //se considera validata partea de business logic odata ajuns aici
 async function createProduct(product){
@@ -6,7 +11,15 @@ async function createProduct(product){
 }
 
 async function getProduct(){
-    return await Product.findAll();
+    const currentDate = new Date();
+    const products = await Product.findAll({
+        where: {
+            ProductExpirationDate : {
+                [Op.lt]: literal('CURRENT_DATE + INTERVAL 7 DAY'),
+            },
+        },
+    });
+    return products;
 }
 
 async function getProductId(id){
@@ -32,5 +45,34 @@ async function deleteProduct(id){
     return {error: false, msg: "", obj: await deleteProductP.destroy()}
 }
 
+async function getUserProducts(email){
+
+    try {
+        // Find the user based on the provided email
+        const user = await User.findOne({
+          where: {
+            UserEmail: email,
+          },
+        });
+    
+        if (!user) {
+          // Handle case where user is not found
+          return [];
+        }
+    
+        // Find all products associated with the user
+        const userProducts = await Product.findAll({
+          where: {
+            UserId: user.UserId,
+          },
+        });
+    
+        return userProducts;
+      } catch (error) {
+        console.error('Error fetching user products:', error);
+        throw error;
+      }
+}
+
 //closure - ob cu mai multe functii
-export {createProduct, getProduct, getProductId, updateProduct, deleteProduct}
+export {createProduct, getProduct, getProductId, updateProduct, deleteProduct, getUserProducts}

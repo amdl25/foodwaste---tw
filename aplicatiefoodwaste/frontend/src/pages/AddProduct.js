@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams} from 'react-router-dom';
 
@@ -11,9 +11,27 @@ const AddProduct = () => {
   const [quantity, setQuantity] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [userProducts, setUserProducts] = useState([]);
 
+  const fetchUserProducts = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/user/${userEmail}/products`);
+      setUserProducts(response.data);
+    } catch (error) {
+      console.error('Fetch user products error:', error);
+    }
+  };
 
+  useEffect(() => {
+    fetchUserProducts();
+  }, [userEmail]);
 
+  const formattedDatesArray = (product) => {
+    if (product) {
+      const [year, month, day] =product.split('T')[0].split('-');
+      return `${year}-${month}-${day}`;
+    }
+  };
   const handleAddProduct = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/add-product', {
@@ -29,6 +47,7 @@ const AddProduct = () => {
       if (response.status === 201) {
         setSuccessMessage('Product added successfully!');
         setErrorMessage('');
+        fetchUserProducts();
 
       }
     } catch (error) {
@@ -85,7 +104,18 @@ const AddProduct = () => {
           <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
         )}
       </div>
+
+      {/* Display the list of user products */}
+      <h2>Lista alimentelor din frigider</h2>
+      <ul>
+        {userProducts.map((product) => (
+          <li key={product.productId}>
+            {product.ProductName} - {product.ProductCategory} - Expiration Date: { formattedDatesArray(product.ProductExpirationDate)} - Quantity: {product.ProductQuantity}
+          </li>
+        ))}
+      </ul>
     </div>
+
   );
 
 };

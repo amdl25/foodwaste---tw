@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProduct, getProductId, updateProduct, deleteProduct } from '../dataAccess/ProductDa.js';
+import { createProduct, getProduct, getProductId, updateProduct, deleteProduct, getUserProducts } from '../dataAccess/ProductDa.js';
 import Product from '../entities/Product.js';
 import User from '../entities/User.js';
 import { Sequelize } from 'sequelize';
@@ -39,6 +39,20 @@ productRouter.route('/product/:id').delete(async (req,res ) => {
         res.status(200).json(ret.obj);
 
 })
+
+productRouter.get('/user/:userEmail/products', async (req, res) => {
+  try {
+    const userEmail = req.params.userEmail;
+
+    // Assume you have a function to fetch user products from the database
+    const userProducts = await getUserProducts(userEmail);
+
+    res.status(200).json(userProducts);
+  } catch (error) {
+    console.error('Error fetching user products:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 productRouter.route('/add-product').post(async (req, res) => {
   const { ProductName, ProductCategory, ProductExpirationDate, ProductQuantity, UserEmail } = req.body;
