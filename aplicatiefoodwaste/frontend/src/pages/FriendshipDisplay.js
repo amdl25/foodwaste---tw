@@ -92,7 +92,7 @@ const FriendshipDisplay = () => {
   useEffect(() => {
     const fetchFriendshipRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/friendshipRequest - list');
+        const response = await axios.get('http://localhost:8000/api/friendshipRequest', { UserEmail: userEmail });
         setFriendshipRequests(response.data);
       } catch (error) {
         console.error('Error fetching friendship requests:', error);

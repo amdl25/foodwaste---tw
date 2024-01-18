@@ -1,5 +1,5 @@
 import express from 'express';
-import { createFriendship, getFriendship, getFriendshipId, updateFriendship, deleteFriendship } from '../dataAccess/FriendshipDa.js';
+import { createFriendship, getFriendship, getFriendshipId, updateFriendship, deleteFriendship, getFriendsList } from '../dataAccess/FriendshipDa.js';
 import Friendship from '../entities/Friendship.js';
 import FriendshipRequest from '../entities/FriendshipRequest.js';
 import User from '../entities/User.js';
@@ -14,9 +14,12 @@ friendshipRouter.route('/friendship').post(async (req, res) => {
     res.status(201).json(await createFriendship(req.body));
 })
 
-friendshipRouter.route('/friendship').get(async (req, res) => {
-    res.status(200).json(await getFriendship());
-})
+friendshipRouter.route('/friendship/:userEmail').get(async (req, res) => {
+  const { userEmail } = req.params;
+  const friendsList = await getFriendsList(userEmail);
+  res.status(200).json(friendsList);
+});
+
 
 friendshipRouter.route('/friendship/:id').get(async (req, res) => {
     res.status(200).json(await getFriendshipId(req.params.id));

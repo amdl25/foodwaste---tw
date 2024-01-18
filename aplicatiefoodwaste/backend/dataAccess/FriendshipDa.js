@@ -1,6 +1,7 @@
 import Friendship from '../entities/Friendship.js';
 import { validateUserIdAndFriendId, checkExistingFriendship } from '../dataAccess/validations/validationsFriendshipRequest.js';
-
+import {Op} from 'sequelize';
+import User from '../entities/User.js';
 //se considera validata partea de business logic odata ajuns aici
 
 async function createFriendship(userId, friendId) {
@@ -51,5 +52,47 @@ async function deleteFriendship(id){
     return {error: false, msg: "", obj: await deleteFriendshipF.destroy()}
 }
 
+async function getFriendsList(userEmail) {
+  try {
+    // Find the user based on userEmail
+    const user = await User.findOne({
+      where: {
+        UserEmail: userEmail,
+      },
+    });
+
+    if (!user) {
+      return []; // User not found, return an empty array or handle accordingly
+    }
+
+    // Fetch friendships where either the user is the userId or the friendId
+    const friendsList = await Friendship.findAll({
+      where: {
+        [Op.or]: [
+          { senderId: user.UserId },
+          { receiverId: user.UserId },
+        ],
+      },
+      include: [
+        // Include additional attributes as needed
+        {
+          model: User,
+          as: 'Sender',
+          attributes: ['UserId', 'UserEmail'],
+        },
+        {
+          model: User,
+          as: 'Receiver',
+          attributes: ['UserId', 'UserEmail'],
+        },
+      ],
+    });
+
+    return friendsList;
+  } catch (error) {
+    console.error('Error fetching friends list:', error);
+    throw error; // Handle the error appropriately
+  }
+}
 //closure - ob cu mai multe functii
-export {createFriendship, getFriendship, getFriendshipId, updateFriendship, deleteFriendship}
+export {createFriendship, getFriendship, getFriendshipId, updateFriendship, deleteFriendship, getFriendsList}

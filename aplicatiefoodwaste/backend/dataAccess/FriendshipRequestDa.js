@@ -1,5 +1,9 @@
 import FriendshipRequest from '../entities/FriendshipRequest.js';
 import { validateUserIdAndFriendId, checkExistingFriendship } from '../dataAccess/validations/validationsFriendshipRequest.js';
+import User from '../entities/FriendshipRequest.js';
+import {Op,literal} from 'sequelize';
+import {Sequelize} from 'sequelize';
+
 
 //se considera validata partea de business logic odata ajuns aici
 
@@ -24,9 +28,35 @@ async function createFriendshipRequest(friendshipRequest) {
     }
   }
 
-async function getFriendshipRequest(){
-    return await FriendshipRequest.findAll();
+async function getFriendshipRequest(UserEmail){
+  try {
+    const friendRequests = await FriendshipRequest.findAll({
+      include: [
+        {
+          model: User,
+          as: 'SenderRequest',
+          attributes: ['UserId', 'UserEmail'],
+        },
+        {
+          model: User,
+          as: 'ReceiverRequest',
+          attributes: ['UserId', 'UserEmail'],
+        },
+      ],
+      where: {
+        receiverId: {
+          [Op.eq]: Sequelize.literal('(SELECT UserId FROM user WHERE UserEmail = :UserEmail)'),
+        },
+      },
+    });
+
+    return friendRequests;
+  } catch (error) {
+    console.error('Error fetching friend requests:', error);
+    throw error;
+  }
 }
+
 
 async function getFriendshipRequestId(id){
     return await FriendshipRequest.findByPk(id);

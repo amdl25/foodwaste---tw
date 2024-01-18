@@ -12,9 +12,14 @@ friendshipRequestRouter.route('/friendshipRequest').post(async (req, res) => {
     res.status(201).json(await createFriendshipRequest(req.body));
 })
 
-friendshipRequestRouter.route('/friendshipRequest').get(async (req, res) => {
-    res.status(200).json(await getFriendshipRequest());
-})
+friendshipRequestRouter.route('/friendshipRequest/:userEmail').get(async (req, res) => {
+ 
+    const { UserEmail } = req.params; // Assuming UserEmail is provided as a query parameter
+    const friendRequests = await getFriendshipRequest(UserEmail);
+
+    res.status(200).json(friendRequests);
+});
+
 
 
 friendshipRequestRouter.route('/friendshipRequest/:id').get(async (req, res) => {

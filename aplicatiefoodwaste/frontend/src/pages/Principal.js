@@ -8,6 +8,10 @@ const Principal = () => {
   const { userEmail } = useParams();
   const [products, setProducts] = useState([]);
   const [mesaj, stateMesaj] = useState(null);
+  const [friendsList, setFriendsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
 
   const handleAddProductClick = () => {
     // Navigate to the addProduct page
@@ -52,6 +56,30 @@ const Principal = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchFriendsList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/friendship/${userEmail}`);
+        setFriendsList(response.data);
+        setError('');
+      } catch (error) {
+        console.error('Fetch friend list error:', error);
+
+        if (error.response) {
+          console.error('Error response from server:', error.response.data);
+          setError(error.response.data.error || 'Server error. Please try again.');
+        } else {
+          setError('Error fetching friend list. Please try again.');
+        }
+
+        setLoading(false);
+      }
+    };
+
+    fetchFriendsList();
+  }, [userEmail]);
+
+
   return (
     <div className="container">
       {/* Left Panel */}
@@ -63,7 +91,6 @@ const Principal = () => {
         </button>
         <button className="button" onClick={handleSeeingFriendship}>Cereri prietenie</button>
         <button className="button" onClick={handleSeeingGrupuri}>Grupuri</button>
-        <button className="button">Lista prieteni</button>
         </div>
      
 
@@ -85,10 +112,25 @@ const Principal = () => {
           <input type="text" placeholder="Il vreau!"/>
           <input type="text" placeholder="Id-ul posesorului"/>
           {mesaj && (
-  <p style={{ color: 'green', marginTop: '10px' }}>{mesaj}</p>
-)}
+           <p style={{ color: 'green', marginTop: '10px' }}>{mesaj}</p>
+          )}
         </div>
       </div>
+
+      <div className="friend-list">
+      <h1>Lista prietenilor</h1>
+        <ul>
+        {friendsList.map((friendship) => (
+          <li key={friendship.FriendshipId}>
+            {/* Display only the names of friends associated with the userEmail */}
+            {friendship.Sender.UserEmail === userEmail
+              ? ` ${friendship.Receiver.UserEmail}`
+              : ` ${friendship.Sender.UserEmail}`}
+          </li>
+        ))}
+      </ul>
+
+    </div>
 
     </div>
   );
